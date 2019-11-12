@@ -6,6 +6,7 @@ from pathlib import Path
 class Corpus(object):
     level = attr.ib(validator=attr.validators.instance_of(int))
     words = attr.ib(validator=attr.validators.instance_of(list))
+    texts = attr.ib(validator=attr.validators.instance_of(list))
     num_words = attr.ib(validator=attr.validators.instance_of(int))
 
     @classmethod
@@ -20,8 +21,12 @@ class Corpus(object):
         print(f'Looking for articles in {articles_path}')
 
         words = []
+        texts = []
         for path in articles_path.glob(f'*.en.{level}.txt'):
-            words_in_file = path.read_text(encoding='utf-8').split()  # does not contain newline characters
+            text_in_file = path.read_text(encoding='utf-8').replace('\n', ' ')
+            words_in_file = text_in_file.split()
             words.extend(words_in_file)
+            texts.append(text_in_file)
         num_words = len(words)
-        return cls(level, words, num_words)
+
+        return cls(level, words, texts, num_words)
