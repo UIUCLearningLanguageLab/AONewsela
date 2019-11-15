@@ -1,28 +1,26 @@
 from tabulate import tabulate
+from pathlib import Path
 
 from wordplay.measures import calc_selectivity
 from wordplay.representation import make_context_by_term_matrix
 
-from categoryeval.probestore import ProbeStore
-
 from newsela.corpus import Corpus
 
 ARTICLES_DIR = '/home/ph/Dropbox/newsela_output'
-CONTEXT_SIZE = 2
+CONTEXT_SIZE = 3
 PROBES_NAME = 'syn-4096'
 CORPUS_NAME = 'childes-20180319'
 NUM_VERSIONS = 5
+
+nouns = set(Path('nouns_for_selectivity.txt').read_text().split('\n'))
+print(nouns)
+
 
 version2y = {}
 version2cttr_chance = {}
 version2cttr_observed = {}
 for version in range(NUM_VERSIONS):
     c = Corpus.from_file_name(f'newsela_version{version}.txt', articles_dir=ARTICLES_DIR)
-
-    w2id = {w: n for n, w in enumerate(set(c.tokens))}
-    probe_store = ProbeStore(CORPUS_NAME, PROBES_NAME, w2id)
-    nouns = probe_store.cat2probes['NOUN']
-    num_nouns_in_corpus = len([1 for w in nouns if w in c.tokens])
 
     # co-occurrence matrix
     tw_mat_observed, xws_observed, _ = make_context_by_term_matrix(c.tokens,
