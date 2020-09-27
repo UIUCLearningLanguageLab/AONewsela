@@ -8,8 +8,6 @@ from newsela.corpus import Corpus
 
 ARTICLES_DIR = '/home/ph/Dropbox/newsela_output'
 CONTEXT_SIZE = 3
-PROBES_NAME = 'syn-4096'
-CORPUS_NAME = 'childes-20180319'
 NUM_VERSIONS = 5
 
 nouns = set(Path('nouns_for_selectivity.txt').read_text().split('\n'))

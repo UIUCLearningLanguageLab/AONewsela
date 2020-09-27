@@ -8,7 +8,7 @@ class Corpus(object):
     version = attr.ib(validator=attr.validators.instance_of(int))
     tokens = attr.ib(validator=attr.validators.instance_of(list))
     texts = attr.ib(validator=attr.validators.instance_of(list))
-    num_words = attr.ib(validator=attr.validators.instance_of(int))
+    num_tokens = attr.ib(validator=attr.validators.instance_of(int))
 
     @classmethod
     def from_version(cls, version, articles_dir):
@@ -21,16 +21,16 @@ class Corpus(object):
 
         print(f'Looking for articles in {articles_path}')
 
-        words = []
+        tokens = []
         texts = []
         for path in articles_path.glob(f'*.en.{version}.txt'):
             text_in_file = path.read_text(encoding='utf-8').replace('\n', ' ')
             words_in_file = text_in_file.split()
-            words.extend(words_in_file)
+            tokens.extend(words_in_file)
             texts.append(text_in_file)
-        num_words = len(words)
+        num_tokens = len(tokens)
 
-        return cls(version, words, texts, num_words)
+        return cls(version, tokens, texts, num_tokens)
 
     @classmethod
     def from_file_name(cls, file_name, articles_dir):
