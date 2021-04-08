@@ -1,4 +1,6 @@
-# Newsela
+# AONewsela
+
+Age-ordered Newsela
 
 A Python API for loading the Newsela corpus, 
 which consists of news articles written for children at various grade levels.
