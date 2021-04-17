@@ -46,12 +46,28 @@ class Pipeline:
         res = []
         for path_article in sorted(article_paths, key=lambda p: path_to_version(p), reverse=True):
 
-            text = path_article.read_text(encoding='utf-8').replace('\n', ' ').lower()
+            # TODO many article start with a location followed by a dash - remove this
+
+            # filter article sub-headings
+            lines_filtered = []
+            for line in path_article.open(encoding='utf-8').readlines():
+
+                if line.startswith('##'):
+                    continue
+
+                if 'http' in line:  # TODO only exclude the sentence or link, not the entire line
+                    continue
+
+                if '<img' in line:
+                    continue
+
+                lines_filtered.append(line.rstrip('\n'))
 
             if not self.params.punctuation:
                 raise NotImplementedError
 
-            res.append(Transcript(text, path_to_version(path_article)))
+            text = ' '.join(lines_filtered)
+            res.append(Transcript(text.lower(), path_to_version(path_article)))
 
         pbar.update()
 

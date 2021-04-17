@@ -35,7 +35,20 @@ class NewselaDataSet:
         return res
 
     def load_sentences(self) -> List[str]:
-        raise NotImplementedError
+
+        exceptions = {'u.s.', 'u.n.', 'st.', 'dr.', 'd.c.', 'jan.', 'feb.'}
+
+        sentences = []
+        tokens_in_sentence = []
+        for token in self.load_tokens():
+            if (token.endswith('.') or token.endswith('!') or token.endswith('?')) and token not in exceptions:
+                sentence = ' '.join(tokens_in_sentence) + ' ' + token
+                sentences.append(sentence)
+                tokens_in_sentence = []
+            else:
+                tokens_in_sentence.append(token)
+
+        return sentences
 
     def load_text(self) -> str:
         return ' '.join(self.load_tokens())
