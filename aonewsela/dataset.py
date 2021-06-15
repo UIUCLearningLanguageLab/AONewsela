@@ -42,7 +42,9 @@ class NewselaDataSet:
         tokens_in_sentence = []
         for token in self.load_tokens():
             if (token.endswith('.') or token.endswith('!') or token.endswith('?')) and token not in exceptions:
-                sentence = ' '.join(tokens_in_sentence) + ' ' + token
+                # separate punctuation from sentence with whitespace
+                punctuation = token[-1]
+                sentence = ' '.join(tokens_in_sentence) + ' ' + token[:-1] + ' ' + punctuation
                 sentences.append(sentence)
                 tokens_in_sentence = []
             else:
